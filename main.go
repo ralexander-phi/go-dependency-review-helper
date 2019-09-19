@@ -11,6 +11,24 @@ import (
 func main() {
 	fmt.Println("Started!")
 
+	fmt.Println(len(os.Getenv("GITHUB_TOKEN")))
+	fmt.Println(os.Getenv("HOME"))
+	fmt.Println(os.Getenv("GITHUB_REF"))
+	fmt.Println(os.Getenv("GITHUB_SHA"))
+	fmt.Println(os.Getenv("GITHUB_REPOSITORY"))
+	fmt.Println(os.Getenv("GITHUB_ACTOR"))
+	fmt.Println(os.Getenv("GITHUB_WORKFLOW"))
+	fmt.Println(os.Getenv("GITHUB_HEAD_REF"))
+	fmt.Println(os.Getenv("GITHUB_BASE_REF"))
+	fmt.Println(os.Getenv("GITHUB_EVENT_NAME"))
+	fmt.Println(os.Getenv("GITHUB_WORKSPACE"))
+	fmt.Println(os.Getenv("GITHUB_ACTION"))
+	fmt.Println(os.Getenv("GITHUB_EVENT_PATH"))
+	fmt.Println(os.Getenv("RUNNER_OS"))
+	fmt.Println(os.Getenv("RUNNER_TOOL_CACHE"))
+	fmt.Println(os.Getenv("RUNNER_TEMP"))
+	fmt.Println(os.Getenv("RUNNER_WORKSPACE"))
+
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},

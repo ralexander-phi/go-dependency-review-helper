@@ -5,7 +5,7 @@ import (
 	"fmt"
 	//"github.com/google/go-github/github"
 	//"golang.org/x/oauth2"
-	"io/ioutil"
+	"bufio"
 	"os"
 	"path/filepath"
 )
@@ -33,13 +33,16 @@ func main() {
 	fmt.Println("")
 	fmt.Println("Event Path contents")
 	file, _ := os.Open(os.Getenv("GITHUB_EVENT_PATH"))
-	b, _ := ioutil.ReadAll(file)
-	fmt.Print(b)
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+
+	}
 
 	fmt.Println("")
 	fmt.Println("WORKSPACE")
 	var files []string
-	err := filepath.Walk(os.Getenv("GITHUB_WORKSPACE"), func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(os.Getenv("GITHUB_WORKSPACE")+"/", func(path string, info os.FileInfo, err error) error {
 		files = append(files, path)
 		return nil
 	})

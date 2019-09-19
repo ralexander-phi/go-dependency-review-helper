@@ -41,33 +41,8 @@ func main() {
 
 	fmt.Println("")
 	fmt.Println("WORKSPACE")
-	var files []string
-	err := filepath.Walk(os.Getenv("GITHUB_WORKSPACE")+"/", func(path string, info os.FileInfo, err error) error {
-		files = append(files, path)
+	_ = filepath.Walk(os.Getenv("GITHUB_WORKSPACE")+"/", func(path string, info os.FileInfo, err error) error {
+		fmt.Println(path)
 		return nil
 	})
-	if err != nil {
-		panic(err)
-	}
-	for _, file := range files {
-		fmt.Println(file)
-	}
-
-	/*
-		ctx := context.Background()
-		ts := oauth2.StaticTokenSource(
-			&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
-		)
-		tc := oauth2.NewClient(ctx, ts)
-		fmt.Println("Client created!")
-
-		client := github.NewClient(tc)
-		fmt.Println("Github client created!")
-
-		// list all repositories for the authenticated user
-			repos, _, err := client.Repositories.List(ctx, "", nil)
-
-			fmt.Println(repos)
-			fmt.Println(err)
-	*/
 }

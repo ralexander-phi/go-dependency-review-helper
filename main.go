@@ -1,17 +1,18 @@
 package main
 
 import (
-	"context"
+	//"context"
 	"fmt"
-	"github.com/google/go-github/github"
-	"golang.org/x/oauth2"
+	//"github.com/google/go-github/github"
+	//"golang.org/x/oauth2"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 )
 
 func main() {
 	fmt.Println("Started!")
 
-	fmt.Println(len(os.Getenv("GITHUB_TOKEN")))
 	fmt.Println(os.Getenv("HOME"))
 	fmt.Println(os.Getenv("GITHUB_REF"))
 	fmt.Println(os.Getenv("GITHUB_SHA"))
@@ -29,19 +30,41 @@ func main() {
 	fmt.Println(os.Getenv("RUNNER_TEMP"))
 	fmt.Println(os.Getenv("RUNNER_WORKSPACE"))
 
-	ctx := context.Background()
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
-	)
-	tc := oauth2.NewClient(ctx, ts)
-	fmt.Println("Client created!")
+	fmt.Println("")
+	fmt.Println("Event Path contents")
+	file, _ := os.Open(os.Getenv("GITHUB_EVENT_PATH"))
+	b, _ := ioutil.ReadAll(file)
+	fmt.Print(b)
 
-	client := github.NewClient(tc)
-	fmt.Println("Github client created!")
+	fmt.Println("")
+	fmt.Println("WORKSPACE")
+	var files []string
+	err := filepath.Walk(os.Getenv("GITHUB_WORKSPACE"), func(path string, info os.FileInfo, err error) error {
+		files = append(files, path)
+		return nil
+	})
+	if err != nil {
+		panic(err)
+	}
+	for _, file := range files {
+		fmt.Println(file)
+	}
 
-	// list all repositories for the authenticated user
-	repos, _, err := client.Repositories.List(ctx, "", nil)
+	/*
+		ctx := context.Background()
+		ts := oauth2.StaticTokenSource(
+			&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
+		)
+		tc := oauth2.NewClient(ctx, ts)
+		fmt.Println("Client created!")
 
-	fmt.Println(repos)
-	fmt.Println(err)
+		client := github.NewClient(tc)
+		fmt.Println("Github client created!")
+
+		// list all repositories for the authenticated user
+			repos, _, err := client.Repositories.List(ctx, "", nil)
+
+			fmt.Println(repos)
+			fmt.Println(err)
+	*/
 }
